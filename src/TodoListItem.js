@@ -56,7 +56,7 @@ export class TodoListItem extends React.Component {
                         </div>
                         <p className="list-group-item-head-name">{this.props.item.itemName}</p>
                         <button className="close" onClick={this.onClickClose}>&times;</button>
-                        <button  className="redact" disabled={this.props.item.itemDone} onClick={this.onClickRedact}>&#9998;</button>
+                        <button  className="redact" disabled={(this.props.item.itemDone||this.props.item.overdue)} onClick={this.onClickRedact}>&#9998;</button>
                     </div>
                     {formBody}
                 </div>
