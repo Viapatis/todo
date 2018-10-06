@@ -11,7 +11,6 @@ if("todoItems" in storage) {
     todoItems=JSON.parse(data);
 }
 
-
 export class TodoApp extends React.Component {
   constructor (props) {
     super(props);
@@ -22,6 +21,24 @@ export class TodoApp extends React.Component {
     this.state = {todoItems: todoItems,
                   mode:mode};
   }
+  componentDidMount(){
+      setInterval(function () {
+          for(let i=0;i<todoItems.length;i++){
+              if((todoItems[i].itemDate!=="")&&(todoItems[i].itemTime!=="")&&!todoItems[i].itemDone){
+                  let currentTime = new Date();
+                  let date = todoItems[i].itemDate + " " + todoItems[i].itemTime;
+                  console.log(date);
+                  let dateItem = new Date(date);
+                  console.log(dateItem);
+                  console.log(currentTime);
+                  if (currentTime > dateItem) {
+                      todoItems[i].overdue = true;
+                      localStorage.setItem("todoItems", JSON.stringify(todoItems));
+                  }
+              }
+          }
+      },60000);
+  };
   addItem(todoItem) {
     todoItems.unshift(todoItem);
     this.setState({todoItems: todoItems});

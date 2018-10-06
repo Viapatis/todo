@@ -29,8 +29,8 @@ export class TodoListItem extends React.Component {
     }
     render () {
         let expendButtonValue=this.state.extended? "-":"+";
-        let todoClass = this.props.item.itemDone ?
-            "todoDone" : "todoUndone";
+        let todoClass = this.props.item.overdue?"todoOverdue" :(this.props.item.itemDone ?
+            "todoDone" : "todoUndone");
         let timeExecuted=(this.props.item.timeExecuted!=="")?
             (<p className="list-group-item-body-other-timeExecuted">Done: {this.props.item.timeExecuted} </p>):"";
         let timeDate=((this.props.item.itemDate!=="")||(this.props.item.itemTime!==""))?

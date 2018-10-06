@@ -1,13 +1,20 @@
 .todoDone{
     border:2px solid #f2f3e6;
-    background: #6666CC;
+    background: #a4d5a6;
     border-radius: 10px;
     width:96%;
     margin: 10px 2% 10px 2%;
 }
 .todoUndone{
-    border:2px solid #f2f3e6;
+border:2px solid #f2f3e6;
     background: #996699;
+    border-radius: 10px;
+    width:96%;
+    margin: 10px 2% 10px 2%;
+}
+.todoOverdue{
+    border:2px solid #f2f3e6;
+    background: #c83f71;
     border-radius: 10px;
     width:96%;
     margin: 10px 2% 10px 2%;

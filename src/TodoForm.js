@@ -11,7 +11,8 @@ export class TodoForm extends React.Component {
                 itemDate: "",
                 itemTime: "",
                 itemDone:false,
-                timeExecuted:""
+                timeExecuted:"",
+                overdue:false
             },
             change:false,
             extended:false
@@ -45,7 +46,8 @@ export class TodoForm extends React.Component {
                 itemDate: "",
                 itemTime: "",
                 itemDone:false,
-                timeExecuted:""
+                timeExecuted:"",
+                overdue:false
                 },
             change: false,
             extended:false
