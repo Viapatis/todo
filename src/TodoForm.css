@@ -1,0 +1,74 @@
+.form-inline{
+    background: #996669;
+    border-radius: 10px;
+    margin: 0 0 0 0;
+}
+.expend-button{
+    position:relative;
+    top:3px;
+    font-family: "Comic Sans MS", serif;
+    border-radius: 5px;
+    background: #f2f3e6;
+    color: #282c34;
+    font-size:20px;
+    border-color: #00040e;
+    height: 30px;
+    width: 25px;
+    margin: 0 0 0 5%;
+}
+.form-name{
+    font-family: "Comic Sans MS", serif;
+    height: 23px;
+    border-color: #00040e;
+    background: #f2f3e6;
+    width:70%;
+    font-size:15px;
+    border-radius: 5px;
+    margin: 20px 0 5% 0;
+}
+.add-button{
+    position:relative;
+    top:3px;
+    font-family: "Comic Sans MS", serif;
+    border-radius: 5px;
+    background: #f2f3e6;
+    color: #282c34;
+    font-size:20px;
+    border-color: #00040e;
+    height: 30px;
+}
+.form-body{
+    border-top: 3px solid #00040e;
+    height: 150px;
+}
+.form-description{
+    font-family: "Comic Sans MS", serif;
+    overflow:auto;
+    margin: 20px 5% 0 5%;
+    width:90%;
+    height: 55%;
+    border-radius: 5px;
+    border-color: #00040e;
+    background: #f2f3e6;
+    font-size:12px;
+}
+.form-importance{
+    border-color: #00040e;
+    font-family: "Comic Sans MS", serif;
+    margin: 0 1% 0 5%;
+    width:20%;
+    height: 25px;
+    border-radius: 5px;
+}
+.form-date{
+    border-color: #00040e;
+    font-family: "Comic Sans MS", serif;
+    margin: 0px 1% 0 29%;
+    border-radius: 5px;
+}
+.form-Time{
+    border-color: #00040e;
+    font-family: "Comic Sans MS", serif;
+    margin: 0 0 0 0;
+    border-radius: 5px;
+}

@@ -1,0 +1,16 @@
+.list-group{
+    border-top: 3px solid #666666;
+    border-radius: 10px;
+}
+.list-group-header{
+    margin: 0 0 0 37%;
+    font-family: "Comic Sans MS", serif;
+}
+.list-group-filter{
+    border-color: #00040e;
+    font-family: "Comic Sans MS", serif;
+    margin: 20px 1% 10px 75%;
+    width:20%;
+    height: 25px;
+    border-radius: 5px;
+}
