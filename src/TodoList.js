@@ -7,10 +7,9 @@ export class TodoList extends React.Component {
         this.state= {
             filterValue: "all"
         };
-        this.getFilterValue = this.getFilterValue.bind(this);
     }
 
-    getFilterValue(event){
+    getFilterValue=(event)=>{
         let filterValue=event.target.value;
         this.setState({filterValue:filterValue});
     }

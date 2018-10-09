@@ -4,7 +4,6 @@ import './App.css';
 import TodoForm from './TodoForm.js';
 import TodoList from './TodoList';
 export let todoItems = [];
-const mode={phase:"new"};
 let storage=localStorage;
 if("todoItems" in storage) {
     let data=storage.getItem("todoItems");
@@ -14,12 +13,12 @@ if("todoItems" in storage) {
 export class TodoApp extends React.Component {
   constructor (props) {
     super(props);
-    this.addItem = this.addItem.bind(this);
-    this.removeItem = this.removeItem.bind(this);
-    this.markTodoDone = this.markTodoDone.bind(this);
-    this.redactItem = this.redactItem.bind(this);
     this.state = {todoItems: todoItems,
-                  mode:mode};
+                  editing:{
+                            allowed:false,
+                            todo:{},
+                            itemIndex:0
+                  }};
   }
   componentDidMount(){
       setInterval(function () {
@@ -29,8 +28,6 @@ export class TodoApp extends React.Component {
                   let date = todoItems[i].itemDate + " " + todoItems[i].itemTime;
                   console.log(date);
                   let dateItem = new Date(date);
-                  console.log(dateItem);
-                  console.log(currentTime);
                   if (currentTime > dateItem) {
                       todoItems[i].overdue = true;
                       localStorage.setItem("todoItems", JSON.stringify(todoItems));
@@ -39,17 +36,17 @@ export class TodoApp extends React.Component {
           }
       },60000);
   };
-  addItem(todoItem) {
+  addItem=(todoItem)=> {
     todoItems.unshift(todoItem);
     this.setState({todoItems: todoItems});
     localStorage.setItem("todoItems", JSON.stringify(todoItems));
   }
-  removeItem (itemIndex) {
+  removeItem =(itemIndex)=>{
     todoItems.splice(itemIndex, 1);
     this.setState({todoItems: todoItems});
     localStorage.setItem("todoItems", JSON.stringify(todoItems));
   }
-  markTodoDone(itemIndex) {
+  markTodoDone=(itemIndex)=> {
       let date = new Date();
       let optionsDate = {
           year: 'numeric',
@@ -67,29 +64,33 @@ export class TodoApp extends React.Component {
       todoItems[itemIndex].timeExecuted=todoItems[itemIndex].itemDone? formatDate:"";
     this.setState({todoItems: todoItems});  
   }
-  redactItem(step,todoItem){
-    if(step==="start"){
-      mode.phase="redact";
-      mode.itemIndex=todoItem.itemIndex;
-      this.setState({mode: mode});
+  redactItem=(todoItem)=>{
+    if(!this.state.editing.allowed){
+      this.setState({
+          ...this.state,
+          editing:{ allowed: true,todo:todoItem,itemIndex: todoItem.itemIndex }
+      });
     }
-    else if( step==="end"){
-      todoItems[mode.itemIndex]=todoItem;
-      mode.phase="new";
-      this.setState({todoItems: todoItems,mode: mode}); 
+    else if( this.state.editing.allowed){
+      todoItems[todoItem.itemIndex]=todoItem;
+        this.setState({
+            ...this.state,
+            editing:{ allowed: false,todo:{},itemIndex: 0 },
+            todoItems:todoItems
+        });
     }
   }
   render() {
     return (
       <div className="main">
         <TodoForm
-            mode={this.state.mode}
+            editing={this.state.editing}
             redactItem={this.redactItem}
             addItem={this.addItem}
             items={this.state.todoItems}
         />
         <TodoList
-            mode={this.state.mode}
+            editing={this.state.editing}
             items={this.state.todoItems}
             redactItem={this.redactItem}
             removeItem={this.removeItem}

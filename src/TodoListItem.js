@@ -6,24 +6,20 @@ export class TodoListItem extends React.Component {
         this.state= {
             extended: false
         };
-        this.onClickClose = this.onClickClose.bind(this);
-        this.onClickDone = this.onClickDone.bind(this);
-        this.onClickRedact = this.onClickRedact.bind(this);
-        this.expendItem = this.expendItem.bind(this);
     }
-    onClickClose() {
+    onClickClose=()=> {
         let index = parseInt(this.props.index);
         this.props.removeItem(index);
     }
-    onClickDone() {
+    onClickDone=()=> {
         let index = parseInt(this.props.index);
         this.props.markTodoDone(index);
     }
-    onClickRedact() {
+    onClickRedact=()=> {
             let itemIndex = parseInt(this.props.index);
-            this.props.redactItem("start", {itemIndex});
+            this.props.redactItem({itemIndex});
     }
-    expendItem(){
+    expendItem=()=>{
         let ind=!this.state.extended;
         this.setState({extended:ind});
     }

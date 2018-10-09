@@ -17,28 +17,18 @@ export class TodoForm extends React.Component {
             change:false,
             extended:false
         };
-        this.addItem = this.addItem.bind(this);
-        this.getDate=this.getDate.bind(this);
-        this.getName=this.getName.bind(this);
-        this.getDescription=this.getDescription.bind(this);
-        this.getImportance=this.getImportance.bind(this);
-        this.getTime=this.getTime.bind(this);
-        this.expendForm=this.expendForm.bind(this);
     };
-    addItem() {
-        let newTodo=this.state.newItem;
-        if(this.props.mode.phase === "new") {
+    addItem=()=> {
+        if(!this.props.editing.allowed) {
+            let newTodo=this.state.newItem;
             this.props.addItem(newTodo);
         }
         else{
-            if(this.state.change)
-                this.props.redactItem("end",newTodo);
-            else {
-                let oldTodo = this.props.items[this.props.mode.itemIndex];
-                this.props.redactItem("end", oldTodo);
-            }
+            let editedTodo=this.state.change ? this.state.newItem:this.props.editing.todo;
+            this.props.redactItem(editedTodo);
         }
         this.setState({
+            ...this.state,
             newItem:{
                 itemName: "",
                 itemDescription:"",
@@ -54,98 +44,107 @@ export class TodoForm extends React.Component {
         });
 
     };
-    getDate(event){
-        if((this.props.mode.phase === "redact")&&(!this.state.change)){
-            let redactItem=this.props.items[this.props.mode.itemIndex];
-            redactItem.itemDate=event.target.value;
-            this.setState({newItem:redactItem,change:true});
-        }
-        else{
-            let item=this.state.newItem;
-            item.itemDate=event.target.value;
-            this.setState({newItem:item,change:true});
-        };
+    getDate=(event)=>{
+        let item=((this.props.editing.allowed)&&(!this.state.change))?
+            this.props.editing.todo:
+            this.state.newItem;
+        item.itemDate=event.target.value;
+        this.setState({
+            ...this.state,
+            newItem:item,
+            change:true
+        });
     };
-    getName(event){
-        if((this.props.mode.phase === "redact")&&(!this.state.change)){
-            let redactItem=this.props.items[this.props.mode.itemIndex];
-            redactItem.itemName=event.target.value;
-            this.setState({newItem:redactItem,change:true});
-        }
-        else{
-            let item=this.state.newItem;
-            item.itemName=event.target.value;
-            this.setState({newItem:item,change:true});
-        };
+    getName=(event)=>{
+        let item=((this.props.editing.allowed)&&(!this.state.change))?
+            this.props.editing.todo:
+            this.state.newItem;
+        item.itemName=event.target.value;
+        this.setState({
+            ...this.state,
+            newItem:item,
+            change:true
+        });
     };
-    getDescription(event){
-        if((this.props.mode.phase === "redact")&&(!this.state.change)){
-            let redactItem=this.props.items[this.props.mode.itemIndex];
-            redactItem.itemDescription=event.target.value;
-            this.setState({newItem:redactItem,change:true});
-        }
-        else{
-            let item=this.state.newItem;
-            item.itemDescription=event.target.value;
-            this.setState({newItem:item,change:true});
-        };
+    getDescription=(event)=>{
+        let item=((this.props.editing.allowed)&&(!this.state.change))?
+            this.props.editing.todo:
+            this.state.newItem;
+        item.itemDescription=event.target.value;
+        this.setState({
+            ...this.state,
+            newItem:item,
+            change:true
+        });
     };
-    getImportance(event){
-        if((this.props.mode.phase === "redact")&&(!this.state.change)){
-            let redactItem=this.props.items[this.props.mode.itemIndex];
-            redactItem.itemImportance=event.target.value;
-            this.setState({newItem:redactItem,change:true});
-        }
-        else{
-            let item=this.state.newItem;
-            item.itemImportance=event.target.value;
-            this.setState({newItem:item,change:true});
-        };
+    getImportance=(event)=>{
+        let item=((this.props.editing.allowed)&&(!this.state.change))?
+            this.props.editing.todo:
+            this.state.newItem;
+        item.itemImportance=event.target.value;
+        this.setState({
+            ...this.state,
+            newItem:item,
+            change:true
+        });
     };
-    getTime(event){
-
-        if((this.props.mode.phase === "redact")&&(!this.state.change)){
-            let redactItem=this.props.items[this.props.mode.itemIndex];
-            redactItem.itemTime=event.target.value;
-            this.setState({newItem:redactItem,change:true});
-        }
-        else{
-            let item=this.state.newItem;
-            item.itemTime=event.target.value;
-            this.setState({newItem:item,change:true});
-        };
+    getTime=(event)=>{
+        let item=((this.props.editing.allowed)&&(!this.state.change))?
+            this.props.editing.todo:
+            this.state.newItem;
+        item.itemTime=event.target.value;
+        this.setState({
+            ...this.state,
+            newItem:item,
+            change:true
+        });
     };
-    expendForm(){
+    expendForm=()=>{
         let ind=!this.state.extended;
         this.setState({extended:ind});
     }
 
 
     render () {
-        let addButtonValue=(this.props.mode.phase === "new")? "Add": "Redact";
-        let expendButtonValue=this.state.extended? "-":"+";
-        let item=(this.props.mode.phase === "new") ? this.state.newItem:
-            (this.state.change?this.state.newItem:this.props.items[this.props.mode.itemIndex]);
-        let formBody=this.state.extended?(
+        let {newItem,change,extended}=this.state;
+        let editing=this.props.editing;
+        let addButtonMessage=editing.allowed ? "Redact": "Add";
+        let item=(editing.allowed&&!change)? editing.todo:newItem;
+        let [formBody,expendButtonValue]=extended?[
             <div className="form-body">
-                <textarea value={item.itemDescription} onInput={this.getDescription}placeholder="Description..."className="form-description"  > </textarea>
+                <textarea
+                    value={item.itemDescription}
+                    onInput={this.getDescription}
+                    placeholder="Description..."
+                    className="form-description"
+                />
                 <div>
                     <select  className="form-importance" value={item.itemImportance} onChange={this.getImportance} >
                         <option>normal</option>
                         <option>important</option>
                         <option>very important</option>
                     </select>
-                    <input type="date"  className="form-date" value={item.itemDate}onInput={this.getDate}/>
-                    <input type="time" value={item.itemTime} onInput={this.getTime} className="form-Time" />
+                    <input
+                        type="date"
+                        className="form-date"
+                        value={item.itemDate}
+                        onInput={this.getDate}
+                    />
+                    <input
+                        type="time"
+                        value={item.itemTime}
+                        onInput={this.getTime}
+                        className="form-Time"
+                    />
                 </div>
-            </div>):"";
+            </div>,"-"]:["","+"];
 
         return (
             <div className="form-inline">
                 <div className="form-head">
                     <button className=" expend-button" onClick={this.expendForm}>{expendButtonValue}</button>
                     <input type="text" className="form-name"  value={item.itemName} onInput={this.getName} placeholder="Name a new todo..."/>
-                    <button className="add-button" onClick={this.addItem}>{addButtonValue}</button>
+                    <button className="add-button" onClick={this.addItem}>{addButtonMessage}</button>
                 </div>
                 {formBody}
             </div>
