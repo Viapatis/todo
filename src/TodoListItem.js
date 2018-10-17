@@ -1,62 +1,93 @@
 import React from "react";
 import './TodoListItem.css';
-export class TodoListItem extends React.Component {
+import TodoForm from "./TodoForm";
+import PropTypes from 'prop-types';
+export default class TodoListItem extends React.Component {
     constructor(props) {
         super(props);
         this.state= {
             extended: false
         };
     }
-    onClickClose=()=> {
-        let index = parseInt(this.props.index);
-        this.props.removeItem(index);
-    }
-    onClickDone=()=> {
-        let index = parseInt(this.props.index);
-        this.props.markTodoDone(index);
-    }
-    onClickRedact=()=> {
-            let itemIndex = parseInt(this.props.index);
-            this.props.redactItem({itemIndex});
-    }
-    expendItem=()=>{
+    onClickClose = () => {
+        let itemIndex = this.props.index;
+        this.props.removeItem(itemIndex);
+    };
+    onClickDone = () => {
+        let itemIndex = this.props.index;
+        this.props.markTodoDone(itemIndex);
+    };
+    onClickRedact = () => {
+        let todo=this.props.item;
+        todo.itemIndex = this.props.index;
+        this.props.redactItem(todo);
+    };
+    expendItem = () =>{
         let ind=!this.state.extended;
-        this.setState({extended:ind});
-    }
+        this.setState({
+            ...this.state,
+            extended:ind
+        });
+    };
     render () {
-        let expendButtonValue=this.state.extended? "-":"+";
-        let todoClass = this.props.item.overdue?"todoOverdue" :(this.props.item.itemDone ?
-            "todoDone" : "todoUndone");
-        let timeExecuted=(this.props.item.timeExecuted!=="")?
-            (<p className="list-group-item-body-other-timeExecuted">Done: {this.props.item.timeExecuted} </p>):"";
-        let timeDate=((this.props.item.itemDate!=="")||(this.props.item.itemTime!==""))?
-            (<p className="list-group-item-body-other-timeDateToComplete">To complete:
-                {this.props.item.itemDate} {this.props.item.itemTime}</p>):"";
-        let formBody=this.state.extended?(
-            <div className="list-group-item-body">
-                <p className="list-group-item-body-description"> {this.props.item.itemDescription}</p>
-                <div className="list-group-item-body-other">
-                    <p className="list-group-item-body-other-importance">Importance: {this.props.item.itemImportance}</p>
-                    <div className="list-group-item-body-other-timeData">
-                        {timeDate}
-                        {timeExecuted}
-                    </div>
+        let {extended} = this.state;
+        let item = this.props.item;
+        let timeExecuted = (item.timeExecuted!=="")?
+            (<p className = "timeExecuted"> Done:{item.timeExecuted} </p>):"";
+        let timeDate = ((item.itemDate!=="")||(item.itemTime!==""))?
+            (<p className = "timeDateToComplete">To complete:
+                {item.itemDate} {item.itemTime}</p>):"";
+        let [formBody ,expendButtonValue] = extended ?
+            [(
+             <div className = "list-group-item item-body">
+                <p className = "description"> {item.itemDescription}</p>
+                <div className = "item-body other">
+                     <p className = "importance">Importance: {item.itemImportance}</p>
+                     <div className = "timeData">
+                         {timeDate}
+                         {timeExecuted}
+                     </div>
                 </div>
-            </div>):"";
-        return(
-                <div className={"list-group-item "+todoClass}>
-                    <div className="list-group-item-head">
-                        <button className="list-group-item-head-expend-button" onClick={this.expendItem}>{expendButtonValue}</button>
-                        <div className="list-group-item-head-checkbox" >
-                            <input type="checkbox" className="checkbox" onChange={this.onClickDone} />
-                        </div>
-                        <p className="list-group-item-head-name">{this.props.item.itemName}</p>
-                        <button className="close" onClick={this.onClickClose}>&times;</button>
-                        <button  className="redact" disabled={(this.props.item.itemDone||this.props.item.overdue)} onClick={this.onClickRedact}>&#9998;</button>
+             </div>
+            ),"-"]:
+            ["","+"];
+        let todoClass = item.overdue ?
+            "todoOverdue" :
+            (item.itemDone ?
+                "todoDone" :
+                "todoUndone");
+        let todoListItem=(
+            <div className = {"list-group-item "+todoClass}>
+                <div className = "list-group-item item-head">
+                    <button className = "expend-button"
+                            onClick={this.expendItem}
+                    >
+                        {expendButtonValue}
+                    </button>
+                    <div className = "head-checkbox" >
+                        <input type = "checkbox" className="checkbox" onChange={this.onClickDone} />
                     </div>
-                    {formBody}
+                    <p className = "name">{item.itemName}</p>
+                    <button className = "close" onClick={this.onClickClose}>&times;</button>
+                    <button
+                        className = "redact"
+                        disabled = {(item.itemDone||item.overdue)}
+                        onClick = {this.onClickRedact}
+                    >
+                        &#9998;
+                    </button>
                 </div>
-        );
+                {formBody}
+            </div>
+        )
+        return(todoListItem);
     }
 }
-export default TodoListItem;
+TodoListItem.propTypes={
+    item:PropTypes.object.isRequired,
+    key: PropTypes.number.isRequired,
+    index:PropTypes.number.isRequired,
+    redactItem: PropTypes.func.isRequired,
+    removeItem: PropTypes.func.isRequired,
+    markTodoDone: PropTypes.func.isRequired
+};

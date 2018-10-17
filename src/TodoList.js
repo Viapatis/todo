@@ -1,44 +1,52 @@
 import React from "react";
 import TodoListItem from './TodoListItem';
 import './TodoList.css';
-export class TodoList extends React.Component {
+import PropTypes from 'prop-types';
+export default class TodoList extends React.Component {
     constructor(props) {
         super(props);
         this.state= {
             filterValue: "all"
         };
     }
-
     getFilterValue=(event)=>{
         let filterValue=event.target.value;
-        this.setState({filterValue:filterValue});
-    }
+        this.setState({
+            ...this.state,
+            filterValue:filterValue
+        });
+    };
     render () {
-        let items = this.props.items.map((item, index) => {
-            return (((this.state.filterValue==="all")||(this.state.filterValue===item.itemImportance))?(
+        let {filterValue}=this.state;
+        let todoItems = this.props.items.map((item, index) => {
+            return (((filterValue==="all")||(filterValue===item.itemImportance))?(
                 <TodoListItem
-                    key={index}
                     item={item}
+                    key={index}
                     index={index}
-                    mode={this.props.mode}
                     redactItem={this.props.redactItem}
                     removeItem={this.props.removeItem}
                     markTodoDone={this.props.markTodoDone}
                 />):""
             );
         });
-        return (
+        let todoList=
             <div className="list-group">
                 <h1 className="list-group-header">Todo list</h1>
-                <select className= "list-group-filter" value ={this.state.filterValue}onChange={this.getFilterValue}>
+                <select className= "list-group-filter" value ={filterValue} onChange={this.getFilterValue}>
                     <option>all</option>
                     <option>normal</option>
                     <option>important</option>
                     <option>very important</option>
                 </select>
-                {items}
-            </div>
-        );
+                {todoItems}
+            </div>;
+        return (todoList);
     }
 }
-export default TodoList;
+TodoList.propTypes={
+    items:PropTypes.array.isRequired,
+    redactItem: PropTypes.func.isRequired,
+    removeItem: PropTypes.func.isRequired,
+    markTodoDone: PropTypes.func.isRequired
+};

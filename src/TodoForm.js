@@ -1,6 +1,7 @@
 import React from "react";
 import './TodoForm.css';
-export class TodoForm extends React.Component {
+import PropTypes from 'prop-types';
+export default class TodoForm extends React.Component {
     constructor(props) {
         super(props);
         this.state= {
@@ -44,60 +45,18 @@ export class TodoForm extends React.Component {
         });
 
     };
-    getDate=(event)=>{
+    getItemField=(fieldName)=>{
         let item=((this.props.editing.allowed)&&(!this.state.change))?
             this.props.editing.todo:
             this.state.newItem;
-        item.itemDate=event.target.value;
-        this.setState({
-            ...this.state,
-            newItem:item,
-            change:true
-        });
-    };
-    getName=(event)=>{
-        let item=((this.props.editing.allowed)&&(!this.state.change))?
-            this.props.editing.todo:
-            this.state.newItem;
-        item.itemName=event.target.value;
-        this.setState({
-            ...this.state,
-            newItem:item,
-            change:true
-        });
-    };
-    getDescription=(event)=>{
-        let item=((this.props.editing.allowed)&&(!this.state.change))?
-            this.props.editing.todo:
-            this.state.newItem;
-        item.itemDescription=event.target.value;
-        this.setState({
-            ...this.state,
-            newItem:item,
-            change:true
-        });
-    };
-    getImportance=(event)=>{
-        let item=((this.props.editing.allowed)&&(!this.state.change))?
-            this.props.editing.todo:
-            this.state.newItem;
-        item.itemImportance=event.target.value;
-        this.setState({
-            ...this.state,
-            newItem:item,
-            change:true
-        });
-    };
-    getTime=(event)=>{
-        let item=((this.props.editing.allowed)&&(!this.state.change))?
-            this.props.editing.todo:
-            this.state.newItem;
-        item.itemTime=event.target.value;
-        this.setState({
-            ...this.state,
-            newItem:item,
-            change:true
-        });
+        return (event) => {
+            item[fieldName] = event.target.value;
+            this.setState({
+                ...this.state,
+                newItem: item,
+                change: true
+            });
+        };
     };
     expendForm=()=>{
         let ind=!this.state.extended;
@@ -106,49 +65,60 @@ export class TodoForm extends React.Component {
 
 
     render () {
-        let {newItem,change,extended}=this.state;
-        let editing=this.props.editing;
-        let addButtonMessage=editing.allowed ? "Redact": "Add";
-        let item=(editing.allowed&&!change)? editing.todo:newItem;
-        let [formBody,expendButtonValue]=extended?[
-            <div className="form-body">
+        let {newItem,change,extended} = this.state;
+        let editing = this.props.editing;
+        let addButtonMessage = editing.allowed ? "Redact" : "Add";
+        let item = (editing.allowed&&!change)? editing.todo : newItem;
+        let [formBody,expendButtonValue]=extended ? [
+            <div className = "form-body">
                 <textarea
-                    value={item.itemDescription}
-                    onInput={this.getDescription}
-                    placeholder="Description..."
-                    className="form-description"
+                    value = {item.itemDescription}
+                    onChange = {this.getItemField("itemDescription")}
+                    placeholder = "Description..."
+                    className = "form-description"
                 />
                 <div>
-                    <select  className="form-importance" value={item.itemImportance} onChange={this.getImportance} >
+                    <select  className="form-importance" value={item.itemImportance} onChange={this.getItemField("itemImportance")} >
                         <option>normal</option>
                         <option>important</option>
                         <option>very important</option>
                     </select>
                     <input
-                        type="date"
-                        className="form-date"
-                        value={item.itemDate}
-                        onInput={this.getDate}
+                        type = "date"
+                        className = "form-date"
+                        value = {item.itemDate}
+                        onChange = {this.getItemField("itemDate")}
                     />
                     <input
-                        type="time"
-                        value={item.itemTime}
-                        onInput={this.getTime}
-                        className="form-Time"
+                        type = "time"
+                        value = {item.itemTime}
+                        onChange = {this.getItemField("itemTime")}
+                        className = "form-Time"
                     />
                 </div>
-            </div>,"-"]:["","+"];
-
-        return (
+            </div>,"-"] : ["","+"];
+        let todoForm=(
             <div className="form-inline">
                 <div className="form-head">
                     <button className=" expend-button" onClick={this.expendForm}>{expendButtonValue}</button>
-                    <input type="text" className="form-name"  value={item.itemName} onInput={this.getName} placeholder="Name a new todo..."/>
+                    <input
+                        type="text"
+                        className="form-name"
+                        value={item.itemName}
+                        onChange={this.getItemField("itemName")}
+                        placeholder="Name a new todo..."
+                    />
                     <button className="add-button" onClick={this.addItem}>{addButtonMessage}</button>
                 </div>
                 {formBody}
             </div>
         );
+
+        return (todoForm);
     }
-}
-export default TodoForm;
+};
+TodoForm.propTypes={
+    redactItem: PropTypes.func.isRequired,
+    addItem: PropTypes.func.isRequired,
+    editing: PropTypes.object.isRequired
+};

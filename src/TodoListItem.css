@@ -19,11 +19,11 @@ border:2px solid #f2f3e6;
     width:96%;
     margin: 10px 2% 10px 2%;
 }
-.list-group-item-head{
+.item-head{
     display: grid;
     grid-template-columns: 8% 7% 70% 6% 6%;
 }
-.list-group-item-head-checkbox{
+.head-checkbox{
     border-right: 2px solid #f2f3e6;
 }
 .checkbox{
@@ -33,7 +33,7 @@ border:2px solid #f2f3e6;
     font-family: "Comic Sans MS", serif;
     margin: 5px 5px 0 0;
 }
-.list-group-item-head-expend-button{
+.expend-button{
     position:relative;
     top:3px;
     font-family: "Comic Sans MS", serif;
@@ -46,7 +46,7 @@ border:2px solid #f2f3e6;
     width: 25px;
     margin: 2px 0 0 10px;
 }
-.list-group-item-head-name{
+.name{
     font-family: "Comic Sans MS", serif;
     height: 23px;
     border-color: #00040e;
@@ -83,10 +83,10 @@ border:2px solid #f2f3e6;
     margin: 2px 0 0 10px;
 
 }
-.list-group-item-body{
+.item-body{
     border-top: 2px solid #f2f3e6;
 }
-.list-group-item-body-description{
+.description{
     font-family: "Comic Sans MS", serif;
     overflow:auto;
     margin: 20px 5% 20px 5%;
@@ -95,16 +95,15 @@ border:2px solid #f2f3e6;
     border-radius: 5px;
     font-size:12px;
 }
-.list-group-item-body-other{
-    border-top: 2px solid #f2f3e6;
+.other{
     display: grid;
     grid-template-columns: 40% 60%;
 }
-.list-group-item-body-other-timeData{
+.timeData{
     display: grid;
     grid-template-rows: 50% 50%;
 }
-.list-group-item-body-other-importance{
+.importance{
     font-family: "Comic Sans MS", serif;
     overflow:auto;
     margin: 10px 5% 10px 5%;
@@ -113,7 +112,7 @@ border:2px solid #f2f3e6;
     border-radius: 5px;
     font-size:12px;
 }
-.list-group-item-body-other-timeDateToComplete{
+.timeDateToComplete{
     margin: 10px 5% 0 5%;
     font-family: "Comic Sans MS", serif;
     width:90%;
@@ -121,7 +120,7 @@ border:2px solid #f2f3e6;
     border-radius: 5px;
     font-size:12px;
 }
-.list-group-item-body-other-timeExecuted{
+.timeExecuted{
     font-family: "Comic Sans MS", serif;
     margin: 5px 5% 5px 5%;
     width:90%;
