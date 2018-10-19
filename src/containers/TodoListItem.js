@@ -1,14 +1,12 @@
 import React from "react";
-import './TodoListItem.css';
-import TodoForm from "./TodoForm";
 import PropTypes from 'prop-types';
-export default class TodoListItem extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state= {
-            extended: false
-        };
-    }
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import '../styles/TodoListItem.css';
+import * as todoListItemActions from '../actions/todoListItemActions';
+
+export class TodoListItem extends React.Component {
     onClickClose = () => {
         let itemIndex = this.props.index;
         this.props.removeItem(itemIndex);
@@ -17,21 +15,16 @@ export default class TodoListItem extends React.Component {
         let itemIndex = this.props.index;
         this.props.markTodoDone(itemIndex);
     };
-    onClickRedact = () => {
+    onClickEdit = () => {
         let todo=this.props.item;
         todo.itemIndex = this.props.index;
-        this.props.redactItem(todo);
+        this.props.editItem(todo);
     };
     expendItem = () =>{
-        let ind=!this.state.extended;
-        this.setState({
-            ...this.state,
-            extended:ind
-        });
+        this.props.todoListItemActions.expendItem();
     };
     render () {
-        let {extended} = this.state;
-        let item = this.props.item;
+        const {extended,item} = this.props;
         let timeExecuted = (item.timeExecuted!=="")?
             (<p className = "timeExecuted"> Done:{item.timeExecuted} </p>):"";
         let timeDate = ((item.itemDate!=="")||(item.itemTime!==""))?
@@ -65,29 +58,41 @@ export default class TodoListItem extends React.Component {
                         {expendButtonValue}
                     </button>
                     <div className = "head-checkbox" >
-                        <input type = "checkbox" className="checkbox" onChange={this.onClickDone} />
+                        <input type = "checkbox" className="checkbox" checked={item.itemDone} onChange={this.onClickDone} />
                     </div>
                     <p className = "name">{item.itemName}</p>
                     <button className = "close" onClick={this.onClickClose}>&times;</button>
                     <button
                         className = "redact"
                         disabled = {(item.itemDone||item.overdue)}
-                        onClick = {this.onClickRedact}
+                        onClick = {this.onClickEdit}
                     >
                         &#9998;
                     </button>
                 </div>
                 {formBody}
             </div>
-        )
+        );
         return(todoListItem);
     }
 }
 TodoListItem.propTypes={
     item:PropTypes.object.isRequired,
-    key: PropTypes.number.isRequired,
+    key: PropTypes.number,
     index:PropTypes.number.isRequired,
-    redactItem: PropTypes.func.isRequired,
+    editItem: PropTypes.func.isRequired,
     removeItem: PropTypes.func.isRequired,
-    markTodoDone: PropTypes.func.isRequired
+    markTodoDone: PropTypes.func.isRequired,
+    extended:PropTypes.bool.isRequired
 };
+function mapStateToProps (state) {
+    return {
+        extended: state.todoListItem.extended,
+    }
+}
+function mapDispatchToProps(dispatch) {
+    return {
+        todoListItemActions: bindActionCreators(todoListItemActions, dispatch)
+    }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(TodoListItem);

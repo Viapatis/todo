@@ -1,72 +1,43 @@
 import React from "react";
-import './TodoForm.css';
 import PropTypes from 'prop-types';
-export default class TodoForm extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state= {
-            newItem: {
-                itemName: "",
-                itemDescription:"",
-                itemImportance: "normal",
-                itemDate: "",
-                itemTime: "",
-                itemDone:false,
-                timeExecuted:"",
-                overdue:false
-            },
-            change:false,
-            extended:false
-        };
-    };
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import '../styles/TodoForm.css';
+import * as todoFormActions from '../actions/todoFormActions';
+
+export class TodoForm extends React.Component {
+
     addItem=()=> {
-        if(!this.props.editing.allowed) {
-            let newTodo=this.state.newItem;
+        let editing=this.props.editing;
+        if(!editing.allowed) {
+            let newTodo=this.props.newItem;
             this.props.addItem(newTodo);
         }
         else{
-            let editedTodo=this.state.change ? this.state.newItem:this.props.editing.todo;
-            this.props.redactItem(editedTodo);
+            let editedTodo=this.props.change ? this.props.newItem:editing.todo;
+            this.props.editItem(editedTodo);
         }
-        this.setState({
-            ...this.state,
-            newItem:{
-                itemName: "",
-                itemDescription:"",
-                itemImportance: "normal",
-                itemDate: "",
-                itemTime: "",
-                itemDone:false,
-                timeExecuted:"",
-                overdue:false
-                },
-            change: false,
-            extended:false
-        });
-
+        this.props.todoFormActions.resetForm();
     };
     getItemField=(fieldName)=>{
-        let item=((this.props.editing.allowed)&&(!this.state.change))?
+        let item=((this.props.editing.allowed)&&(!this.props.change))?
             this.props.editing.todo:
-            this.state.newItem;
+            this.props.newItem;
         return (event) => {
             item[fieldName] = event.target.value;
-            this.setState({
-                ...this.state,
-                newItem: item,
-                change: true
-            });
+            this.props.todoFormActions.getItemField(item);
         };
     };
     expendForm=()=>{
-        let ind=!this.state.extended;
-        this.setState({extended:ind});
-    }
+        let ind=!this.props.extended;
+        this.props.todoFormActions.expendForm(ind);
+    };
 
 
     render () {
-        let {newItem,change,extended} = this.state;
-        let editing = this.props.editing;
+       // console.log(this.props.newItem);
+        const {newItem,change,extended,editing}= this.props;
         let addButtonMessage = editing.allowed ? "Redact" : "Add";
         let item = (editing.allowed&&!change)? editing.todo : newItem;
         let [formBody,expendButtonValue]=extended ? [
@@ -116,9 +87,25 @@ export default class TodoForm extends React.Component {
 
         return (todoForm);
     }
-};
+}
 TodoForm.propTypes={
-    redactItem: PropTypes.func.isRequired,
+    editItem: PropTypes.func.isRequired,
     addItem: PropTypes.func.isRequired,
-    editing: PropTypes.object.isRequired
+    editing: PropTypes.object.isRequired,
+    newItem:PropTypes.object.isRequired,
+    change:PropTypes.bool.isRequired,
+    extended:PropTypes.bool.isRequired
 };
+function mapStateToProps (state) {
+    return {
+        newItem: state.todoForm.newItem,
+        change:state.todoForm.change,
+        extended:state.todoForm.extended
+    }
+}
+function mapDispatchToProps(dispatch) {
+    return {
+        todoFormActions: bindActionCreators(todoFormActions, dispatch)
+    }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(TodoForm);
