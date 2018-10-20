@@ -1,0 +1,41 @@
+[33mcommit aa3360874dae16194a429215af99f9850e330b45[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31mtodo/master[m[33m)[m
+Author: KiselevAndrew <almo-alin@mail.ru>
+Date:   Sat Oct 20 06:41:43 2018 +0700
+
+    added redux
+
+[33mcommit b62cd7fcfe25bf823219c4b1438a185e06a5cb9f[m
+Author: KiselevAndrew <almo-alin@mail.ru>
+Date:   Wed Oct 17 22:52:53 2018 +0700
+
+    added validation
+
+[33mcommit 9142b1616940629d7d93418bb54da3ead900e874[m
+Author: KiselevAndrew <almo-alin@mail.ru>
+Date:   Tue Oct 9 15:30:36 2018 +0700
+
+    delete past project
+
+[33mcommit 9b8ccdfe979d024d1204a4f9bb43b35867a008fe[m
+Author: KiselevAndrew <almo-alin@mail.ru>
+Date:   Tue Oct 9 15:25:22 2018 +0700
+
+    adding destructors and disposal of Binding methods
+
+[33mcommit 66fd871795faa6de1118d7ef79c6db3a84c734a9[m
+Author: KiselevAndrew <almo-alin@mail.ru>
+Date:   Sat Oct 6 21:41:45 2018 +0700
+
+     ban on editing at elapsed time
+
+[33mcommit c72a4d1e91700ecddb5643fb79ba7fab4b86b1d5[m
+Author: KiselevAndrew <almo-alin@mail.ru>
+Date:   Sat Oct 6 21:27:48 2018 +0700
+
+    test task completed
+
+[33mcommit bfc9ff26734e5d19d657f0ae0f67b7ea9d4179d1[m
+Author: KiselevAndrew <almo-alin@mail.ru>
+Date:   Sat Oct 6 19:12:47 2018 +0700
+
+    Complite test work
