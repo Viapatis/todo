@@ -27,7 +27,7 @@ export class TodoList extends React.Component {
             );
         });
         let todoList=
-            <div className="list-group">
+            <div className="list-group" >
                 <h1 className="list-group-header">Todo list</h1>
                 <select className= "list-group-filter" value ={filterValue} onChange={this.getFilterValue}>
                     <option>all</option>

@@ -1,4 +1,4 @@
-import { ADD_ITEM ,REMOVE_ITEM,DONE_ITEM,EDIT_ITEM} from '../constants/App';
+import { ADD_ITEM ,REMOVE_ITEM,DONE_ITEM,EDIT_ITEM,OVERDUE_CHECK} from '../constants/App';
 
 const initialState = {
     todoItems:[],
@@ -73,6 +73,25 @@ export default function app(state = initialState,action) {
                         itemIndex: 0
                     }
                 };
+            }
+        }
+        case OVERDUE_CHECK: {
+            console.log('f');
+            let todoItems = [...state.todoItems];
+            for(let i=0;i<todoItems.length;i++){
+                if((todoItems[i].itemDate!=="")&&!todoItems[i].itemDone){
+                    let time=(todoItems[i].itemTime!=="")?todoItems[i].itemTime:"00:00";
+                    let currentTime = new Date();
+                    let date = todoItems[i].itemDate + " " + time;
+                    let dateItem = new Date(date);
+                    if (currentTime > dateItem) {
+                        todoItems[i].overdue = true;
+                    }
+                }
+            }
+            return{
+                ...state,
+                todoItems: [...todoItems]
             }
         }
         default: return state

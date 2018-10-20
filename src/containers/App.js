@@ -9,6 +9,10 @@ import TodoList from './TodoList';
 import * as appActions from '../actions/appActions';
 
 export class TodoApp extends React.Component {
+
+    componentDidMount=()=>{
+        setInterval(() => this.props.appActions.overdueCheck(),120000);
+    };
   render() {
       let{todoItems,editing}=this.props;
       let { addItem,removeItem,markTodoDone,editItem } = this.props.appActions;
@@ -23,7 +27,8 @@ export class TodoApp extends React.Component {
             items = {todoItems}
             editItem = {editItem}
             removeItem = {removeItem}
-            markTodoDone = {markTodoDone}/>
+            markTodoDone = {markTodoDone}
+        />
       </div>
     );
   }
