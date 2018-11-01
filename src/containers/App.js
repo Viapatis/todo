@@ -11,41 +11,27 @@ import * as appActions from '../actions/appActions';
 export class TodoApp extends React.Component {
 
     componentDidMount=()=>{
-        setInterval(() => this.props.appActions.overdueCheck(),120000);
+        setInterval(() => this.props.overdueCheck(),60000);
     };
   render() {
-      let{todoItems,editing}=this.props;
-      let { addItem,removeItem,markTodoDone,editItem } = this.props.appActions;
       return (
       <div className = "main">
-        <TodoForm
-            editing = {editing}
-            editItem = {editItem}
-            addItem = {addItem}
-        />
-        <TodoList
-            items = {todoItems}
-            editItem = {editItem}
-            removeItem = {removeItem}
-            markTodoDone = {markTodoDone}
-        />
+        <TodoForm/>
+        <TodoList/>
       </div>
     );
   }
 }
 TodoApp.propTypes={
-    todoItems:PropTypes.array.isRequired,
-    editing:PropTypes.object.isRequired
+    overdueCheck:PropTypes.func.isRequired,
 };
 function mapStateToProps (state) {
     return {
-        todoItems: state.app.todoItems,
-        editing: state.app.editing,
     }
 }
 function mapDispatchToProps(dispatch) {
     return {
-        appActions: bindActionCreators(appActions, dispatch)
+        overdueCheck: bindActionCreators(appActions, dispatch).overdueCheck
     }
 }
 export default connect(mapStateToProps,mapDispatchToProps)(TodoApp);

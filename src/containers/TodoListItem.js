@@ -4,52 +4,51 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import '../styles/TodoListItem.css';
-import * as todoListItemActions from '../actions/todoListItemActions';
+import * as appActions from '../actions/appActions';
 
 export class TodoListItem extends React.Component {
     onClickClose = () => {
-        let itemIndex = this.props.index;
+        const itemIndex = this.props.index;
         this.props.removeItem(itemIndex);
     };
     onClickDone = () => {
-        let itemIndex = this.props.index;
+        const itemIndex = this.props.index;
         this.props.markTodoDone(itemIndex);
     };
     onClickEdit = () => {
-        let todo=this.props.item;
+        const todo=this.props.item;
         todo.itemIndex = this.props.index;
         this.props.editItem(todo);
     };
     expendItem = () =>{
-        this.props.todoListItemActions.expendItem();
+        const itemIndex = this.props.index;
+        this.props.expendItem(itemIndex);
     };
     render () {
-        const {extended,item} = this.props;
-        let timeExecuted = (item.timeExecuted!=="")?
-            (<p className = "timeExecuted"> Done:{item.timeExecuted} </p>):"";
-        let timeDate = ((item.itemDate!=="")||(item.itemTime!==""))?
-            (<p className = "timeDateToComplete">To complete:
-                {item.itemDate} {item.itemTime}</p>):"";
-        let [formBody ,expendButtonValue] = extended ?
-            [(
-             <div className = "list-group-item item-body">
+        const {item} = this.props;
+        const showTimeExecuted = !(item.timeExecuted!=="");
+        const showTimeDate = !((item.itemDate!=="")||(item.itemTime!==""));
+        const expendButtonValue = item.extended ? "-": "+";
+        const formBody=(
+            <div className = "list-group-item item-body" hidden={!item.extended}>
                 <p className = "description"> {item.itemDescription}</p>
                 <div className = "item-body other">
-                     <p className = "importance">Importance: {item.itemImportance}</p>
-                     <div className = "timeData">
-                         {timeDate}
-                         {timeExecuted}
-                     </div>
+                    <p className = "importance">Importance: {item.itemImportance}</p>
+                    <div className = "timeData">
+                        <p className ="timeDateToComplete" hidden={showTimeDate}>
+                            To complete:{item.itemDate} {item.itemTime}
+                        </p>
+                        <p className = "timeExecuted"hidden={showTimeExecuted}> Done:{item.timeExecuted} </p>
+                    </div>
                 </div>
-             </div>
-            ),"-"]:
-            ["","+"];
-        let todoClass = item.overdue ?
+            </div>
+        );
+        const todoClass = item.overdue ?
             "todoOverdue" :
             (item.itemDone ?
                 "todoDone" :
                 "todoUndone");
-        let todoListItem=(
+        const todoListItem=(
             <div className = {"list-group-item "+todoClass}>
                 <div className = "list-group-item item-head">
                     <button className = "expend-button"
@@ -83,16 +82,18 @@ TodoListItem.propTypes={
     editItem: PropTypes.func.isRequired,
     removeItem: PropTypes.func.isRequired,
     markTodoDone: PropTypes.func.isRequired,
-    extended:PropTypes.bool.isRequired
+    expendItem: PropTypes.func.isRequired
 };
 function mapStateToProps (state) {
     return {
-        extended: state.todoListItem.extended,
     }
 }
 function mapDispatchToProps(dispatch) {
     return {
-        todoListItemActions: bindActionCreators(todoListItemActions, dispatch)
+        editItem: bindActionCreators(appActions, dispatch).editItem,
+        removeItem:bindActionCreators(appActions, dispatch).removeItem,
+        markTodoDone:bindActionCreators(appActions, dispatch).markTodoDone,
+        expendItem:bindActionCreators(appActions, dispatch).expendItem
     }
 }
-export default connect(mapStateToProps,mapDispatchToProps)(TodoListItem);
+export default connect( mapStateToProps,mapDispatchToProps)(TodoListItem);

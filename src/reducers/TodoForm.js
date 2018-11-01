@@ -9,7 +9,8 @@ const initialState = {
         itemTime: "",
         itemDone:false,
         timeExecuted:"",
-        overdue:false
+        overdue:false,
+        extended:false
     },
     change:false,
     extended:false
@@ -28,7 +29,8 @@ export default function todoForm(state = initialState,action) {
                     itemTime: "",
                     itemDone:false,
                     timeExecuted:"",
-                    overdue:false
+                    overdue:false,
+                    extended:false
                 },
                 change: false,
                 extended:false

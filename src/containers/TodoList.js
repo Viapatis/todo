@@ -13,16 +13,13 @@ export class TodoList extends React.Component {
         this.props.todoListActions.getFilterValue(filterValue);
     };
     render () {
-        const {filterValue,items,editItem,removeItem,markTodoDone}=this.props;
+        const {filterValue,items}=this.props;
         let todoItems = items.map((item, index) => {
             return (((filterValue === "all")||(filterValue===item.itemImportance))?(
                 <TodoListItem
                     item={item}
                     key={index}
                     index={index}
-                    editItem={editItem}
-                    removeItem={removeItem}
-                    markTodoDone={markTodoDone}
                 />):""
             );
         });
@@ -42,13 +39,12 @@ export class TodoList extends React.Component {
 }
 TodoList.propTypes={
     items:PropTypes.array.isRequired,
-    editItem: PropTypes.func.isRequired,
-    removeItem: PropTypes.func.isRequired,
-    markTodoDone: PropTypes.func.isRequired
+    todoListActions:PropTypes.object.isRequired
 };
 function mapStateToProps (state) {
     return {
         filterValue: state.todoList.filterValue,
+        items:state.app.todoItems
     }
 }
 function mapDispatchToProps(dispatch) {

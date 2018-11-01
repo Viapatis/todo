@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 
 import '../styles/TodoForm.css';
 import * as todoFormActions from '../actions/todoFormActions';
+import * as appActions from '../actions/appActions';
 
 export class TodoForm extends React.Component {
 
@@ -36,12 +37,12 @@ export class TodoForm extends React.Component {
 
 
     render () {
-       // console.log(this.props.newItem);
         const {newItem,change,extended,editing}= this.props;
-        let addButtonMessage = editing.allowed ? "Redact" : "Add";
-        let item = (editing.allowed&&!change)? editing.todo : newItem;
-        let [formBody,expendButtonValue]=extended ? [
-            <div className = "form-body">
+        const addButtonMessage = editing.allowed ? "Redact" : "Add";
+        const item = (editing.allowed&&!change)? editing.todo : newItem;
+        const expendButtonValue=extended ? "-": "+";
+        const formBody=(
+            <div className = "form-body" hidden={!extended}>
                 <textarea
                     value = {item.itemDescription}
                     onChange = {this.getItemField("itemDescription")}
@@ -67,7 +68,8 @@ export class TodoForm extends React.Component {
                         className = "form-Time"
                     />
                 </div>
-            </div>,"-"] : ["","+"];
+            </div>
+        );
         let todoForm=(
             <div className="form-inline">
                 <div className="form-head">
@@ -100,12 +102,15 @@ function mapStateToProps (state) {
     return {
         newItem: state.todoForm.newItem,
         change:state.todoForm.change,
-        extended:state.todoForm.extended
+        extended:state.todoForm.extended,
+        editing: state.app.editing
     }
 }
 function mapDispatchToProps(dispatch) {
     return {
-        todoFormActions: bindActionCreators(todoFormActions, dispatch)
+        todoFormActions: bindActionCreators(todoFormActions, dispatch),
+        addItem:bindActionCreators(appActions, dispatch).addItem,
+        editItem:bindActionCreators(appActions, dispatch).editItem
     }
 }
 export default connect(mapStateToProps,mapDispatchToProps)(TodoForm);

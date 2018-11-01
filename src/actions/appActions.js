@@ -38,3 +38,11 @@ export function overdueCheck() {
         }
     }
 }
+export function expendItem (itemIndex) {
+    return {
+        type: 'EXPEND_ITEM',
+        payload: {
+            itemIndex:itemIndex
+        }
+    }
+}

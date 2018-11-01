@@ -1,4 +1,4 @@
-import { ADD_ITEM ,REMOVE_ITEM,DONE_ITEM,EDIT_ITEM,OVERDUE_CHECK} from '../constants/App';
+import { ADD_ITEM ,REMOVE_ITEM,DONE_ITEM,EDIT_ITEM,OVERDUE_CHECK,EXPEND_ITEM} from '../constants/App';
 
 const initialState = {
     todoItems:[],
@@ -18,8 +18,8 @@ export default function app(state = initialState,action) {
             };
         }
         case REMOVE_ITEM: {
-            let todoItems = state.todoItems;
-            let itemIndex = action.payload.itemIndex;
+            const {todoItems} = state;
+            const {itemIndex} = action.payload;
             todoItems.splice(itemIndex, 1);
             return {
                 ...state,
@@ -32,10 +32,10 @@ export default function app(state = initialState,action) {
             };
         }
         case DONE_ITEM: {
-            let formatDate=getDate();
-            let todoItems = state.todoItems;
-            let itemIndex = action.payload.itemIndex;
-            let todoItem={...todoItems[itemIndex]};
+            const formatDate=getDate();
+            const {todoItems} = state;
+            const {itemIndex} = action.payload;
+            const todoItem={...todoItems[itemIndex]};
             todoItem.itemDone = !todoItem.itemDone;
             todoItem.timeExecuted = todoItem.itemDone ? formatDate : "";
             todoItems[itemIndex]= todoItem;
@@ -50,7 +50,7 @@ export default function app(state = initialState,action) {
             };
         }
         case EDIT_ITEM: {
-            let todoItem = action.payload.todoItem;
+            const {todoItem} = action.payload;
             if (!state.editing.allowed) {
                 return {
                     ...state,
@@ -62,8 +62,8 @@ export default function app(state = initialState,action) {
                 };
             }
             else {
-                let todoItems = state.todoItems;
-                todoItems[state.editing.itemIndex] = todoItem;
+                const {todoItems,editing} = state;
+                todoItems[editing.itemIndex] = todoItem;
                 return {
                     ...state,
                     todoItems: [...todoItems],
@@ -76,16 +76,16 @@ export default function app(state = initialState,action) {
             }
         }
         case OVERDUE_CHECK: {
-            console.log('f');
-            let todoItems = [...state.todoItems];
+            const todoItems = [...state.todoItems];
             for(let i=0;i<todoItems.length;i++){
                 if((todoItems[i].itemDate!=="")&&!todoItems[i].itemDone){
-                    let time=(todoItems[i].itemTime!=="")?todoItems[i].itemTime:"00:00";
-                    let currentTime = new Date();
-                    let date = todoItems[i].itemDate + " " + time;
-                    let dateItem = new Date(date);
+                    const time=(todoItems[i].itemTime!=="")?todoItems[i].itemTime:"00:00";
+                    const currentTime = new Date();
+                    const date = todoItems[i].itemDate + " " + time;
+                    const dateItem = new Date(date);
                     if (currentTime > dateItem) {
                         todoItems[i].overdue = true;
+                        todoItems[i]={...todoItems[i]};
                     }
                 }
             }
@@ -94,26 +94,35 @@ export default function app(state = initialState,action) {
                 todoItems: [...todoItems]
             }
         }
+        case EXPEND_ITEM:
+            const {todoItems} = state;
+            const {itemIndex} = action.payload;
+            const todoItem={...todoItems[itemIndex]};
+            todoItem.extended=!todoItem.extended;
+            todoItems[itemIndex]=todoItem;
+            return{
+                ...state,
+                todoItems: [...todoItems]
+            };
         default: return state
     }
 }
 function getDate() {
-    let date = new Date();
-    let optionsDate = {
+    const date = new Date();
+    const optionsDate = {
         year: 'numeric',
         month: 'numeric',
         day: 'numeric',
 
     };
-    let optionsTime = {
+    const optionsTime = {
         hour: 'numeric',
         minute: 'numeric',
     };
 
-    let formatDate = date.toLocaleString("ru", optionsDate)
+    return  date.toLocaleString("ru", optionsDate)
             .split(".")
             .reverse()
             .join("-")
         + " " + date.toLocaleString("ru", optionsTime);
-    return formatDate;
 }
